@@ -8,7 +8,7 @@
 [required]
 
 # スクリーンショット
-[optional] ただしUI変更の時は [required]
+[optional]
 
 # 変更点概要
 
