@@ -52,3 +52,11 @@ resource "aws_ssm_parameter" "weather_app_sendgrid_api_key" {
   type  = "SecureString"
   value = "${data.external.sendgrid_secret_json.result["API_KEY"]}"
 }
+
+// AWS.SSM. getParametersByPath のリミット件数をテストする為のresources
+resource "aws_ssm_parameter" "sample_parameters" {
+  count = 21
+  name  = "/${terraform.workspace}/test-app/sample-list/KEY${count.index}"
+  type  = "String"
+  value = "TestValue${count.index}"
+}
