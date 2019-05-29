@@ -39,7 +39,7 @@ data "template_file" "go_rest_api_fargate_template_file" {
   template = "${file("../../../../modules/aws/api/task/go-rest-api.json")}"
 
   vars {
-    image_url      = "${lookup(var.vpc, "vpc_id")}"
+    image_url      = "${lookup(var.ecr, "go_rest_api_image_url")}"
     aws_region     = "${data.aws_region.current.name}"
     aws_logs_group = "${aws_cloudwatch_log_group.go_rest_api.name}"
   }

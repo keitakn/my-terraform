@@ -57,4 +57,10 @@ variable "vpc" {
   default = {}
 }
 
+variable "ecr" {
+  type = "map"
+
+  default = {}
+}
+
 data "aws_elb_service_account" "aws_elb_service_account" {}

@@ -19,3 +19,14 @@ data "terraform_remote_state" "network" {
     profile = "nekochans-dev"
   }
 }
+
+data "terraform_remote_state" "ecr" {
+  backend = "s3"
+
+  config {
+    bucket  = "keitakn-tfstate"
+    key     = "env:/${terraform.env}/ecr/terraform.tfstate"
+    region  = "ap-northeast-1"
+    profile = "nekochans-dev"
+  }
+}
