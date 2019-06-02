@@ -187,3 +187,41 @@ resource "aws_alb_listener_rule" "go_graphql" {
     values = ["/graphql"]
   }
 }
+
+resource "aws_alb_target_group" "serverless_express" {
+  name                               = "${lookup(var.serverless_express, "${terraform.env}.name", var.serverless_express["default.name"])}"
+  target_type                        = "lambda"
+  lambda_multi_value_headers_enabled = true
+}
+
+resource "aws_lambda_permission" "serverless_express_with_alb" {
+  statement_id  = "AllowExecutionFromlb"
+  action        = "lambda:InvokeFunction"
+  function_name = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.self.account_id}:function:${lookup(var.serverless_express, "${terraform.env}.function", var.serverless_express["default.function"])}"
+  principal     = "elasticloadbalancing.amazonaws.com"
+  source_arn    = "${aws_alb_target_group.serverless_express.arn}"
+}
+
+resource "aws_alb_target_group_attachment" "serverless_express" {
+  target_group_arn = "${aws_alb_target_group.serverless_express.arn}"
+  target_id        = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.self.account_id}:function:${lookup(var.serverless_express, "${terraform.env}.function", var.serverless_express["default.function"])}"
+  depends_on       = ["aws_lambda_permission.serverless_express_with_alb"]
+}
+
+resource "aws_alb_listener_rule" "serverless_express" {
+  listener_arn = "${aws_alb_listener.api_alb.arn}"
+
+  lifecycle {
+    ignore_changes = ["action"]
+  }
+
+  "action" {
+    type             = "forward"
+    target_group_arn = "${aws_alb_target_group.serverless_express.id}"
+  }
+
+  "condition" {
+    field  = "path-pattern"
+    values = ["/express"]
+  }
+}

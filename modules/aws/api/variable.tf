@@ -34,6 +34,23 @@ variable "go_graphql" {
   }
 }
 
+variable "serverless_express" {
+  type = "map"
+
+  default = {
+    default.name     = "prod-serverless-express"
+    stg.name         = "stg-serverless-express"
+    dev.name         = "dev-serverless-express"
+    qa.name          = "dev-serverless-express"
+    default.function = "serverless-express-prod-server"
+    prod.function    = "serverless-express-prod-server"
+    stg.function     = "serverless-express-stg-server"
+    dev.function     = "serverless-express-dev-server"
+    qa.function      = "serverless-express-qa-server"
+    region           = "ap-northeast-1"
+  }
+}
+
 variable "main_domain_name" {
   type = "string"
 
@@ -64,3 +81,5 @@ variable "ecr" {
 }
 
 data "aws_elb_service_account" "aws_elb_service_account" {}
+
+data "aws_caller_identity" "self" {}
