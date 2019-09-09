@@ -54,7 +54,7 @@ resource "aws_codedeploy_app" "go_rest_api" {
   )
 }
 
-resource "aws_codedeploy_deployment_group" "fargate_api_blue_green_deploy" {
+resource "aws_codedeploy_deployment_group" "go_rest_api_blue_green_deploy" {
   app_name               = aws_codedeploy_app.go_rest_api.name
   deployment_group_name  = "blue-green"
   service_role_arn       = aws_iam_role.codedeploy_for_fargate_role.arn
@@ -89,7 +89,7 @@ resource "aws_codedeploy_deployment_group" "fargate_api_blue_green_deploy" {
   load_balancer_info {
     target_group_pair_info {
       prod_traffic_route {
-        listener_arns = [aws_alb_listener.api_alb.arn]
+        listener_arns = [aws_alb_listener.rest_api_alb.arn]
       }
 
       target_group {
@@ -147,7 +147,7 @@ resource "aws_codedeploy_deployment_group" "go_graphql_blue_green_deploy" {
   load_balancer_info {
     target_group_pair_info {
       prod_traffic_route {
-        listener_arns = [aws_alb_listener.api_alb.arn]
+        listener_arns = [aws_alb_listener.graphql_alb.arn]
       }
 
       target_group {

@@ -57,7 +57,7 @@ resource "aws_iam_role_policy" "vpc_flow_logs_role" {
 }
 
 resource "aws_cloudwatch_log_group" "vpc_flow_log" {
-  name              = "${terraform.workspace}-vpc-flow-log"
+  name              = "${terraform.workspace}-${data.aws_region.current.name}-vpc-flow-log"
   retention_in_days = 1
 }
 

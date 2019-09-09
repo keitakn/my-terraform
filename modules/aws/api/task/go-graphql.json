@@ -18,6 +18,16 @@
         "awslogs-region": "${aws_region}",
         "awslogs-stream-prefix": "ecs"
       }
-    }
+    },
+    "secrets": [
+      {
+        "name": "SLACK_TOKEN",
+        "valueFrom": "${slack_token_arn}"
+      },
+      {
+        "name": "SENDGRID_API_KEY",
+        "valueFrom": "${sendgrid_api_key_arn}"
+      }
+    ]
   }
 ]
