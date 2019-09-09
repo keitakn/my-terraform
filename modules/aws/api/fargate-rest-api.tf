@@ -1,53 +1,3 @@
-data "aws_region" "current" {
-}
-
-resource "aws_security_group" "go_rest_api" {
-  name = lookup(
-    var.go_rest_api,
-    "${terraform.workspace}.name",
-    var.go_rest_api["default.name"],
-  )
-  description = "Security Group to ${lookup(
-    var.go_rest_api,
-    "${terraform.workspace}.name",
-    var.go_rest_api["default.name"],
-  )}"
-  vpc_id = var.vpc["vpc_id"]
-
-  tags = {
-    Name = lookup(
-      var.go_rest_api,
-      "${terraform.workspace}.name",
-      var.go_rest_api["default.name"],
-    )
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_security_group_rule" "go_rest_api_from_alb" {
-  security_group_id        = aws_security_group.go_rest_api.id
-  type                     = "ingress"
-  from_port                = "8080"
-  to_port                  = "8080"
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.api_alb.id
-}
-
-resource "aws_cloudwatch_log_group" "go_rest_api" {
-  name = lookup(
-    var.go_rest_api,
-    "${terraform.workspace}.name",
-    var.go_rest_api["default.name"],
-  )
-  retention_in_days = 30
-}
-
 resource "aws_ecs_cluster" "go_rest_api_fargate_cluster" {
   name = lookup(
     var.go_rest_api,
@@ -60,9 +10,11 @@ data "template_file" "go_rest_api_fargate_template_file" {
   template = file("../../../../modules/aws/api/task/go-rest-api.json")
 
   vars = {
-    image_url      = var.ecr["go_rest_api_image_url"]
-    aws_region     = data.aws_region.current.name
-    aws_logs_group = aws_cloudwatch_log_group.go_rest_api.name
+    image_url            = var.ecr["go_rest_api_image_url"]
+    aws_region           = data.aws_region.current.name
+    aws_logs_group       = aws_cloudwatch_log_group.go_rest_api.name
+    slack_token_arn      = var.ssm["news_app_slack_token_arn"]
+    sendgrid_api_key_arn = var.ssm["news_app_sendgrid_api_key_arn"]
   }
 }
 
@@ -123,5 +75,5 @@ resource "aws_ecs_service" "go_rest_api_fargate_service" {
     ]
   }
 
-  depends_on = [aws_alb_listener.api_alb]
+  depends_on = [aws_alb_listener.rest_api_alb]
 }
