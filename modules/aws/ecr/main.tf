@@ -25,14 +25,15 @@ locals {
     ]
   }
 EOF
+
 }
 
 resource "aws_ecr_lifecycle_policy" "go_rest_api" {
-  repository = "${aws_ecr_repository.go_rest_api.name}"
-  policy     = "${local.lifecycle_policy}"
+  repository = aws_ecr_repository.go_rest_api.name
+  policy     = local.lifecycle_policy
 }
 
 resource "aws_ecr_lifecycle_policy" "go_graphql" {
-  repository = "${aws_ecr_repository.go_graphql.name}"
-  policy     = "${local.lifecycle_policy}"
+  repository = aws_ecr_repository.go_graphql.name
+  policy     = local.lifecycle_policy
 }
