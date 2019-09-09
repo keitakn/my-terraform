@@ -1,3 +1,3 @@
 output "ssm" {
-  value = "${module.ssm.ssm}"
+  value = module.ssm.ssm
 }

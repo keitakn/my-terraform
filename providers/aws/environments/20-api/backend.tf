@@ -1,5 +1,5 @@
 terraform {
-  required_version = "=0.11.13"
+  required_version = "=0.12.8"
 
   backend "s3" {
     bucket  = "keitakn-tfstate"
@@ -12,9 +12,9 @@ terraform {
 data "terraform_remote_state" "network" {
   backend = "s3"
 
-  config {
+  config = {
     bucket  = "keitakn-tfstate"
-    key     = "env:/${terraform.env}/network/terraform.tfstate"
+    key     = "env:/${terraform.workspace}/network/terraform.tfstate"
     region  = "ap-northeast-1"
     profile = "nekochans-dev"
   }
@@ -23,9 +23,9 @@ data "terraform_remote_state" "network" {
 data "terraform_remote_state" "ecr" {
   backend = "s3"
 
-  config {
+  config = {
     bucket  = "keitakn-tfstate"
-    key     = "env:/${terraform.env}/ecr/terraform.tfstate"
+    key     = "env:/${terraform.workspace}/ecr/terraform.tfstate"
     region  = "ap-northeast-1"
     profile = "nekochans-dev"
   }
