@@ -68,6 +68,36 @@ http://nopipi.hatenablog.com/entry/2019/01/03/132701
 
 しかしCloudFront等一部のサービスは `us-east-1` の証明書しか利用出来ないので、取得しておいても良いでしょう。
 
+## AWS Secrets Manager
+
+`providers/aws/environments/10-ssm/main.tf` でParameterStoreを作成しています。
+
+これの元になるSecretManagerを事前に作成しておく必要があります。
+
+- `${terraform.workspace}/keitakn/sendgrid`
+
+```json
+{
+  "TOKEN": "中身は文字列なら何でもOK"
+}
+```
+
+- `${terraform.workspace}/keitakn/slack`
+
+```json
+{
+  "API_KEY": "中身は文字列なら何でもOK"
+}
+```
+
+`${terraform.workspace}` の部分には任意のworkspace名を入れて下さい。
+
+例えば `terraform workspace new dev` を実行し `dev` という名前のworkspaceを作成した場合、 `dev/keitakn/slack` という名前でSecretManagerを作成します。
+
+こうする事によって共通の機密情報を複数のアプリケーションで使い回せるようにしてあります。
+
+詳しくは [AWS Secrets ManagerからParameter StoreをTerraformで作成する](https://qiita.com/keitakn/items/55da7f9f3c3659cfc804) という記事を参考にして下さい。
+
 # 設計方針について
 
 https://github.com/nekochans/terraform-boilerplate と設計方針は同じです。
