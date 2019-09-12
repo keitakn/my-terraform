@@ -67,3 +67,25 @@ http://nopipi.hatenablog.com/entry/2019/01/03/132701
 証明書は `ap-northeast-1` で作成すればとりあえず大丈夫です。
 
 しかしCloudFront等一部のサービスは `us-east-1` の証明書しか利用出来ないので、取得しておいても良いでしょう。
+
+# 設計方針について
+
+https://github.com/nekochans/terraform-boilerplate と設計方針は同じです。
+
+以下の順番で `terraform init` および `terraform apply` を実行して下さい。
+
+1. `providers/aws/environments/10-network/`
+1. `providers/aws/environments/10-ssm/`
+1. `providers/aws/environments/11-ecr/`
+1. `providers/aws/environments/20-api/`
+
+マルチリージョン、マルチAZで稼働する前提になっているので、合計6つのNAT Gatewayが起動します。
+
+その為、起動させておくとそこそこ料金がかかるので、動作確認後は `terraform destroy` でリソースを削除しておく事をオススメします。
+
+`20-api` では以下の2つのアプリケーションが起動します。
+
+これらのアプリケーションをECRにプッシュする事でAWS Fargateのクラスタが動作します。
+
+- https://github.com/keitakn/go-rest-api
+- https://github.com/keitakn/go-graphql
