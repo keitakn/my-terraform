@@ -78,7 +78,7 @@ http://nopipi.hatenablog.com/entry/2019/01/03/132701
 
 ```json
 {
-  "TOKEN": "中身は文字列なら何でもOK"
+  "API_KEY": "中身は文字列なら何でもOK"
 }
 ```
 
@@ -86,7 +86,7 @@ http://nopipi.hatenablog.com/entry/2019/01/03/132701
 
 ```json
 {
-  "API_KEY": "中身は文字列なら何でもOK"
+  "TOKEN": "中身は文字列なら何でもOK"
 }
 ```
 
