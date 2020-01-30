@@ -3,12 +3,6 @@
 
 # Getting Started
 
-## Terraformのインストール
-
-Terraform 0.12.8 で動作します。（2019-09-12時点での最新安定版）
-
-[tfenv](https://github.com/tfutils/tfenv) 等を使ってTerraform本体をインストールして下さい。
-
 ## AWSクレデンシャルの設定
 
 `providers/aws/environments/**/backend.tf` を見ると分かるのですが、 `profile` で `nekochans-dev` という名前を使っています。
@@ -98,11 +92,34 @@ http://nopipi.hatenablog.com/entry/2019/01/03/132701
 
 詳しくは [AWS Secrets ManagerからParameter StoreをTerraformで作成する](https://qiita.com/keitakn/items/55da7f9f3c3659cfc804) という記事を参考にして下さい。
 
+## Terraformのインストール（Dockerで動くようになったので任意です）
+
+[tfenv](https://github.com/tfutils/tfenv) 等を使ってTerraform本体をインストールして下さい。
+
+バージョンはDockerfileに書いてあるので参照して下さい。
+
+## 作業用のコンテナを起動させる
+
+初回は以下のコマンドを実行します。
+
+`docker-compose up --build -d`
+
+2回目以降は以下のコマンドでOKです。
+
+`docker-compose up -d`
+
 # 設計方針について
 
 https://github.com/nekochans/terraform-boilerplate と設計方針は同じです。
 
 以下の順番で `terraform init` および `terraform apply` を実行して下さい。
+
+Docker起動後にホストOS上で以下のコマンドを実行すると `terraform init` が実行されます。
+
+```
+chmod 755 terraform-init-dev.sh
+docker-compose exec terraform ./terraform-init-dev.sh
+```
 
 1. `providers/aws/environments/10-network/`
 1. `providers/aws/environments/10-ssm/`
