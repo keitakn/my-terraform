@@ -3,12 +3,6 @@
 
 # Getting Started
 
-## Terraformのインストール
-
-Terraform 0.12.8 で動作します。（2019-09-12時点での最新安定版）
-
-[tfenv](https://github.com/tfutils/tfenv) 等を使ってTerraform本体をインストールして下さい。
-
 ## AWSクレデンシャルの設定
 
 `providers/aws/environments/**/backend.tf` を見ると分かるのですが、 `profile` で `nekochans-dev` という名前を使っています。
@@ -97,6 +91,12 @@ http://nopipi.hatenablog.com/entry/2019/01/03/132701
 こうする事によって共通の機密情報を複数のアプリケーションで使い回せるようにしてあります。
 
 詳しくは [AWS Secrets ManagerからParameter StoreをTerraformで作成する](https://qiita.com/keitakn/items/55da7f9f3c3659cfc804) という記事を参考にして下さい。
+
+## Terraformのインストール（Dockerで動くようになったので任意です）
+
+[tfenv](https://github.com/tfutils/tfenv) 等を使ってTerraform本体をインストールして下さい。
+
+バージョンはDockerfileに書いてあるので参照して下さい。
 
 # 設計方針について
 
