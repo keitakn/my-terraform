@@ -98,11 +98,28 @@ http://nopipi.hatenablog.com/entry/2019/01/03/132701
 
 バージョンはDockerfileに書いてあるので参照して下さい。
 
+## 作業用のコンテナを起動させる
+
+初回は以下のコマンドを実行します。
+
+`docker-compose up --build -d`
+
+2回目以降は以下のコマンドでOKです。
+
+`docker-compose up -d`
+
 # 設計方針について
 
 https://github.com/nekochans/terraform-boilerplate と設計方針は同じです。
 
 以下の順番で `terraform init` および `terraform apply` を実行して下さい。
+
+Docker起動後にホストOS上で以下のコマンドを実行すると `terraform init` が実行されます。
+
+```
+chmod 755 terraform-init-dev.sh
+docker-compose exec terraform ./terraform-init-dev.sh
+```
 
 1. `providers/aws/environments/10-network/`
 1. `providers/aws/environments/10-ssm/`
