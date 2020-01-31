@@ -125,6 +125,7 @@ docker-compose exec terraform ./terraform-init-dev.sh
 1. `providers/aws/environments/10-ssm/`
 1. `providers/aws/environments/11-ecr/`
 1. `providers/aws/environments/20-api/`
+1. `providers/aws/environments/20-eks`
 
 マルチリージョン、マルチAZで稼働する前提になっているので、合計6つのNAT Gatewayが起動します。
 
