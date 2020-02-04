@@ -66,4 +66,6 @@ resource "aws_flow_log" "vpc_flow_log" {
   log_destination = aws_cloudwatch_log_group.vpc_flow_log.arn
   traffic_type    = "REJECT"
   vpc_id          = aws_vpc.vpc.id
+
+  depends_on = [aws_cloudwatch_log_group.vpc_flow_log]
 }
