@@ -8,12 +8,12 @@ variable "default_az" {
   }
 }
 
-variable "us_east_1_az" {
-  type = map(string)
-
-  default = {
-    "default.az_1" = "us-east-1a"
-    "default.az_2" = "us-east-1b"
-    "default.az_3" = "us-east-1b"
-  }
-}
+//variable "us_east_1_az" {
+//  type = map(string)
+//
+//  default = {
+//    "default.az_1" = "us-east-1a"
+//    "default.az_2" = "us-east-1b"
+//    "default.az_3" = "us-east-1b"
+//  }
+//}
