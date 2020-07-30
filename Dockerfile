@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:0.12.20
+FROM hashicorp/terraform:0.12.29
 
 RUN mkdir -p /app/my-terraform
 
