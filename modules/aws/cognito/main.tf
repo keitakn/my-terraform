@@ -6,6 +6,8 @@ resource "aws_cognito_user_pool" "pool" {
     allow_admin_create_user_only = false
   }
 
+  username_attributes = ["email", "phone_number"]
+
   password_policy {
     minimum_length                   = 8
     require_lowercase                = true
@@ -13,6 +15,12 @@ resource "aws_cognito_user_pool" "pool" {
     require_symbols                  = true
     require_uppercase                = true
     temporary_password_validity_days = 7
+  }
+
+  mfa_configuration = "OPTIONAL"
+
+  software_token_mfa_configuration {
+    enabled = true
   }
 
   verification_message_template {
