@@ -24,10 +24,10 @@ resource "aws_cognito_user_pool" "user_pool" {
   }
 
   verification_message_template {
-    default_email_option = "CONFIRM_WITH_CODE"
-    email_message        = "検証コードは {####} です。"
-    email_subject        = "検証コード"
-    sms_message          = "検証コードは {####} です。"
+    default_email_option  = "CONFIRM_WITH_LINK"
+    email_message_by_link = "メールアドレスを検証するには、次のリンクをクリックしてください。 {##Verify Email##}"
+    email_subject_by_link = "cognito 検証リンク"
+    sms_message           = "検証コードは {####} です。"
   }
 
   schema {
