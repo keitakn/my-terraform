@@ -119,8 +119,8 @@ resource "aws_cognito_identity_pool_roles_attachment" "id_pool" {
 }
 
 // https://github.com/keitakn/next-idaas
-resource "aws_cognito_user_pool_client" "next_idaas_client" {
-  name                          = "${terraform.workspace}-next-idaas"
+resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
+  name                          = "${terraform.workspace}-next-idaas-spa"
   user_pool_id                  = aws_cognito_user_pool.user_pool.id
   generate_secret               = false
   prevent_user_existence_errors = "ENABLED"
