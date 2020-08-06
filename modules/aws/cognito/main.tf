@@ -49,6 +49,11 @@ resource "aws_cognito_user_pool" "user_pool" {
   }
 }
 
+resource "aws_cognito_user_pool_domain" "admin_user_nurse_senka" {
+  domain       = "${terraform.workspace}-keitakn"
+  user_pool_id = aws_cognito_user_pool.user_pool.id
+}
+
 resource "aws_cognito_identity_pool" "id_pool" {
   identity_pool_name               = "${terraform.workspace} keitakn IDPool"
   allow_unauthenticated_identities = false
