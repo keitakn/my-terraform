@@ -126,7 +126,7 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
   prevent_user_existence_errors = "ENABLED"
   refresh_token_validity        = 30
 
-  supported_identity_providers = ["COGNITO"]
+  supported_identity_providers = ["COGNITO", "${terraform.workspace}-LINE"]
 
   callback_urls = sort([
     "http://localhost:3900/cognito/authorized",
@@ -140,4 +140,30 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
 
   allowed_oauth_flows  = ["code"]
   allowed_oauth_scopes = ["openid", "phone", "email", "profile"]
+
+  depends_on = [aws_cognito_identity_provider.line]
+}
+
+resource "aws_cognito_identity_provider" "line" {
+  user_pool_id  = aws_cognito_user_pool.user_pool.id
+  provider_name = "${terraform.workspace}-LINE"
+  provider_type = "OIDC"
+
+  provider_details = {
+    client_id                     = jsondecode(data.aws_secretsmanager_secret_version.next_idaas.secret_string)["LINE_CLIENT_ID"]
+    client_secret                 = jsondecode(data.aws_secretsmanager_secret_version.next_idaas.secret_string)["LINE_CLIENT_SECRET"]
+    attributes_request_method     = "GET"
+    authorize_scopes              = "profile email openid"
+    oidc_issuer                   = "https://access.line.me"
+    authorize_url                 = "https://access.line.me/oauth2/v2.1/authorize"
+    token_url                     = "https://api.line.me/oauth2/v2.1/token"
+    attributes_url                = "https://api.line.me/v2/profile"
+    attributes_url_add_attributes = false
+    jwks_uri                      = "https://api.line.me/oauth2/v2.1/verify"
+  }
+
+  attribute_mapping = {
+    email    = "email"
+    username = "sub"
+  }
 }
