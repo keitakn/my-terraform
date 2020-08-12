@@ -125,4 +125,19 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
   generate_secret               = false
   prevent_user_existence_errors = "ENABLED"
   refresh_token_validity        = 30
+
+  supported_identity_providers = ["COGNITO"]
+
+  callback_urls = sort([
+    "http://localhost:3900/cognito/authorized",
+  ])
+
+  logout_urls = sort([
+    "http://localhost:3900/cognito/logout",
+  ])
+
+  allowed_oauth_flows_user_pool_client = true
+
+  allowed_oauth_flows  = ["code"]
+  allowed_oauth_scopes = ["openid", "phone", "email", "profile"]
 }
