@@ -126,7 +126,7 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
   prevent_user_existence_errors = "ENABLED"
   refresh_token_validity        = 30
 
-  supported_identity_providers = ["COGNITO", "${terraform.workspace}-LINE"]
+  supported_identity_providers = ["COGNITO", "LINE"]
 
   callback_urls = sort([
     "http://localhost:3900/cognito/authorized",
@@ -146,7 +146,7 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
 
 resource "aws_cognito_identity_provider" "line" {
   user_pool_id  = aws_cognito_user_pool.user_pool.id
-  provider_name = "${terraform.workspace}-LINE"
+  provider_name = "LINE"
   provider_type = "OIDC"
 
   provider_details = {
