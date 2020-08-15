@@ -129,7 +129,7 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
   supported_identity_providers = ["COGNITO", "LINE"]
 
   callback_urls = sort([
-    "http://localhost:3900/cognito/authorized",
+    "http://localhost:3900/cognito/callback",
   ])
 
   logout_urls = sort([
