@@ -126,7 +126,7 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
   prevent_user_existence_errors = "ENABLED"
   refresh_token_validity        = 30
 
-  supported_identity_providers = ["COGNITO", "LINE"]
+  supported_identity_providers = ["COGNITO", "LINE", "Facebook"]
 
   callback_urls = sort([
     "http://localhost:3900/cognito/callback",
@@ -141,7 +141,7 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
   allowed_oauth_flows  = ["code"]
   allowed_oauth_scopes = ["openid", "phone", "email", "profile"]
 
-  depends_on = [aws_cognito_identity_provider.line]
+  depends_on = [aws_cognito_identity_provider.line, aws_cognito_identity_provider.facebook]
 }
 
 resource "aws_cognito_identity_provider" "line" {
@@ -165,5 +165,28 @@ resource "aws_cognito_identity_provider" "line" {
   attribute_mapping = {
     email    = "email"
     username = "sub"
+  }
+}
+
+resource "aws_cognito_identity_provider" "facebook" {
+  user_pool_id  = aws_cognito_user_pool.user_pool.id
+  provider_name = "Facebook"
+  provider_type = "Facebook"
+
+  provider_details = {
+    api_version                   = "v6.0"
+    authorize_scopes              = "public_profile,email"
+    client_id                     = jsondecode(data.aws_secretsmanager_secret_version.next_idaas.secret_string)["FACEBOOK_CLIENT_ID"]
+    client_secret                 = jsondecode(data.aws_secretsmanager_secret_version.next_idaas.secret_string)["FACEBOOK_CLIENT_SECRET"]
+    attributes_url                = "https://graph.facebook.com/v6.0/me?fields="
+    attributes_url_add_attributes = true
+    authorize_url                 = "https://www.facebook.com/v6.0/dialog/oauth"
+    token_request_method          = "GET"
+    token_url                     = "https://graph.facebook.com/v6.0/oauth/access_token"
+  }
+
+  attribute_mapping = {
+    email    = "email"
+    username = "id"
   }
 }
