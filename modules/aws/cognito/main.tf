@@ -49,73 +49,9 @@ resource "aws_cognito_user_pool" "user_pool" {
   }
 }
 
-resource "aws_cognito_user_pool_domain" "admin_user_nurse_senka" {
+resource "aws_cognito_user_pool_domain" "user_pool_domain" {
   domain       = "${terraform.workspace}-keitakn"
   user_pool_id = aws_cognito_user_pool.user_pool.id
-}
-
-resource "aws_cognito_identity_pool" "id_pool" {
-  identity_pool_name               = "${terraform.workspace} keitakn IDPool"
-  allow_unauthenticated_identities = false
-}
-
-resource "aws_iam_role" "authenticated" {
-  name = "${terraform.workspace}-cognito-authenticated"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "cognito-identity.amazonaws.com"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "cognito-identity.amazonaws.com:aud": "${aws_cognito_identity_pool.id_pool.id}"
-        },
-        "ForAnyValue:StringLike": {
-          "cognito-identity.amazonaws.com:amr": "authenticated"
-        }
-      }
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy" "authenticated" {
-  name = "${terraform.workspace}-authenticated-policy"
-  role = aws_iam_role.authenticated.id
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "mobileanalytics:PutEvents",
-        "cognito-sync:*",
-        "cognito-identity:*"
-      ],
-      "Resource": [
-        "*"
-      ]
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_cognito_identity_pool_roles_attachment" "id_pool" {
-  identity_pool_id = aws_cognito_identity_pool.id_pool.id
-
-  roles = {
-    "authenticated" = aws_iam_role.authenticated.arn
-  }
 }
 
 // https://github.com/keitakn/next-idaas
@@ -125,6 +61,7 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
   generate_secret               = false
   prevent_user_existence_errors = "ENABLED"
   refresh_token_validity        = 30
+  explicit_auth_flows           = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
 
   supported_identity_providers = ["COGNITO", "LINE", "Facebook"]
 
