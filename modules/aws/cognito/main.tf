@@ -49,7 +49,7 @@ resource "aws_cognito_user_pool" "user_pool" {
   }
 }
 
-resource "aws_cognito_user_pool_domain" "admin_user_nurse_senka" {
+resource "aws_cognito_user_pool_domain" "user_pool_domain" {
   domain       = "${terraform.workspace}-keitakn"
   user_pool_id = aws_cognito_user_pool.user_pool.id
 }
