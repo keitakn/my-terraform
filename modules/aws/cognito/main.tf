@@ -127,3 +127,28 @@ resource "aws_cognito_identity_provider" "facebook" {
     username = "id"
   }
 }
+
+resource "aws_cognito_resource_server" "cognito_admin_api" {
+  identifier = "${terraform.workspace}-cognito-admin-api"
+  name       = "${terraform.workspace}-cognito-admin-api"
+
+  scope {
+    scope_description = "go-cognito-lambdaに実装されているcognitoの管理者用APIの利用権限"
+    scope_name        = "admin"
+  }
+
+  user_pool_id = aws_cognito_user_pool.user_pool.id
+}
+
+resource "aws_cognito_user_pool_client" "next_idaas_server_client" {
+  name                          = "${terraform.workspace}-next-idaas-server"
+  user_pool_id                  = aws_cognito_user_pool.user_pool.id
+  generate_secret               = true
+  prevent_user_existence_errors = "ENABLED"
+
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_flows                  = ["client_credentials"]
+  allowed_oauth_scopes                 = ["${aws_cognito_resource_server.cognito_admin_api.name}/admin"]
+
+  depends_on = [aws_cognito_resource_server.cognito_admin_api]
+}
