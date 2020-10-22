@@ -148,7 +148,7 @@ resource "aws_cognito_user_pool_client" "next_idaas_server_client" {
 
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["client_credentials"]
-  allowed_oauth_scopes                 = ["${aws_cognito_resource_server.cognito_admin_api.name}/admin"]
+  allowed_oauth_scopes                 = ["${aws_cognito_resource_server.cognito_admin_api.identifier}/admin"]
 
   depends_on = [aws_cognito_resource_server.cognito_admin_api]
 }
