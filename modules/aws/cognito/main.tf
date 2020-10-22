@@ -129,8 +129,8 @@ resource "aws_cognito_identity_provider" "facebook" {
 }
 
 resource "aws_cognito_resource_server" "cognito_admin_api" {
-  identifier = "${terraform.workspace}-cognito-admin-api"
   name       = "${terraform.workspace}-cognito-admin-api"
+  identifier = "${terraform.workspace}-cognito-admin-api.keitakn.de"
 
   scope {
     scope_description = "go-cognito-lambdaに実装されているcognitoの管理者用APIの利用権限"
