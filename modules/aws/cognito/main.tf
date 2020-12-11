@@ -61,7 +61,7 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
   generate_secret               = false
   prevent_user_existence_errors = "ENABLED"
   refresh_token_validity        = 30
-  explicit_auth_flows           = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
+  explicit_auth_flows           = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_CUSTOM_AUTH"]
 
   supported_identity_providers = ["COGNITO", "LINE", "Facebook"]
 
