@@ -67,10 +67,12 @@ resource "aws_cognito_user_pool_client" "next_idaas_spa_client" {
 
   callback_urls = sort([
     "http://localhost:3900/cognito/callback",
+    "http://localhost:3900/cognito/idp/callback",
   ])
 
   logout_urls = sort([
     "http://localhost:3900/cognito/logout",
+    "http://localhost:3900/cognito/idp/logout",
   ])
 
   allowed_oauth_flows_user_pool_client = true
