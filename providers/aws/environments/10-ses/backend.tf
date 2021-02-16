@@ -1,5 +1,5 @@
 terraform {
-  required_version = "=0.12.29"
+  required_version = "=0.13.6"
 
   backend "s3" {
     bucket  = "keitakn-tfstate"
@@ -8,4 +8,3 @@ terraform {
     profile = "nekochans-dev"
   }
 }
-
