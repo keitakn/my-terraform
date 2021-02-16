@@ -126,6 +126,7 @@ docker-compose exec terraform ./terraform-init-dev.sh
 1. `providers/aws/environments/10-ssm/`
 1. `providers/aws/environments/11-ecr/`
 1. `providers/aws/environments/11-cognito/`
+1. `providers/aws/environments/12-dynamodb/`
 1. `providers/aws/environments/20-api/`
 1. `providers/aws/environments/20-eks`
 
