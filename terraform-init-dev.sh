@@ -1,6 +1,7 @@
 #!/bin/sh
 
 tfstateDirList='
+/app/my-terraform/providers/aws/environments/10-acm
 /app/my-terraform/providers/aws/environments/10-network
 /app/my-terraform/providers/aws/environments/10-ses
 /app/my-terraform/providers/aws/environments/10-ssm
