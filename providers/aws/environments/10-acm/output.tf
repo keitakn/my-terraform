@@ -1,4 +1,4 @@
-output "ap_northeast_1_acm" {
+output "acm_ap_northeast_1" {
   value = module.ap_northeast_1_acm.acm
 }
 
