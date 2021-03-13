@@ -2,6 +2,10 @@ variable "convert_webp_lambda" {
   type = map(string)
 
   default = {
+    "default.keitakn_images_bucket_name"   = "prod-keitakn-images"
+    "stg.keitakn_images_bucket_name"       = "stg-keitakn-images"
+    "dev.keitakn_images_bucket_name"       = "dev-keitakn-images"
+    "qa.keitakn_images_bucket_name"        = "qa-keitakn-images"
     "default.webp_images_bucket_name"      = "prod-webp-images"
     "stg.webp_images_bucket_name"          = "stg-webp-images"
     "dev.webp_images_bucket_name"          = "dev-webp-images"

@@ -1,3 +1,25 @@
+resource "aws_s3_bucket" "keitakn_images_bucket" {
+  bucket = lookup(var.convert_webp_lambda, "${terraform.workspace}.keitakn_images_bucket_name", var.convert_webp_lambda["default.keitakn_images_bucket_name"])
+  acl    = "private"
+
+  force_destroy = true
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle_rule {
+    enabled = true
+    // 失効した削除マーカーまたは不完全なマルチパートアップロードを削除する
+    abort_incomplete_multipart_upload_days = 7
+
+    // 古いバージョンは30日で削除
+    noncurrent_version_expiration {
+      days = 30
+    }
+  }
+}
+
 resource "aws_s3_bucket" "webp_images_bucket" {
   bucket = lookup(var.convert_webp_lambda, "${terraform.workspace}.webp_images_bucket_name", var.convert_webp_lambda["default.webp_images_bucket_name"])
   acl    = "private"
