@@ -8,7 +8,7 @@ variable "rds" {
     "default.engine"         = "aurora-mysql"
     "default.engine_version" = "5.7.mysql_aurora.2.09.2"
     "default.instance_class" = "db.t3.small"
-    "default.instance_count" = 1
+    "default.instance_count" = 2
   }
 }
 
