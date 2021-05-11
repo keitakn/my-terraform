@@ -22,6 +22,20 @@ variable "rds_local_reader_domain_name" {
   default = "rds-reader"
 }
 
+variable "bastion" {
+  type = map(string)
+
+  default = {
+    "default.name"          = "prod-bastion"
+    "stg.name"              = "stg-bastion"
+    "dev.name"              = "dev-bastion"
+    "default.ami"           = "ami-0ca38c7440de1749a"
+    "default.instance_type" = "t2.micro"
+    "default.volume_type"   = "gp2"
+    "default.volume_size"   = "30"
+  }
+}
+
 variable "vpc" {
   type = map(string)
 
