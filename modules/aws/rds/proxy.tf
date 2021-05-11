@@ -24,19 +24,30 @@ resource "aws_security_group" "rds_proxy" {
   description = "rds proxy security group"
   vpc_id      = var.vpc["vpc_id"]
 
-  ingress {
-    from_port       = 3306
-    to_port         = 3306
-    protocol        = "tcp"
-    security_groups = [aws_security_group.vpc_lambda.id, aws_security_group.bastion.id]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_security_group_rule" "rds_proxy_from_bastion_server" {
+  security_group_id        = aws_security_group.rds_proxy.id
+  type                     = "ingress"
+  from_port                = "3306"
+  to_port                  = "3306"
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.bastion.id
+}
+
+resource "aws_security_group_rule" "rds_proxy_from_vpc_lambda" {
+  security_group_id        = aws_security_group.rds_proxy.id
+  type                     = "ingress"
+  from_port                = "3306"
+  to_port                  = "3306"
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.vpc_lambda.id
 }
 
 resource "aws_db_proxy" "rds_proxy" {
@@ -56,10 +67,10 @@ resource "aws_db_proxy" "rds_proxy" {
   auth {
     auth_scheme = "SECRETS"
     iam_auth    = "DISABLED"
-    secret_arn  = aws_secretsmanager_secret.rds_connection_info.arn
+    secret_arn  = aws_secretsmanager_secret.rds_connection.arn
   }
 
-  depends_on = [aws_rds_cluster.rds_cluster, aws_secretsmanager_secret_version.rds_connection_info]
+  depends_on = [aws_rds_cluster.rds_cluster, aws_secretsmanager_secret_version.rds_connection]
 }
 
 resource "aws_db_proxy_default_target_group" "rds_proxy" {
@@ -86,7 +97,8 @@ resource "aws_db_proxy_endpoint" "read_only" {
     var.vpc["subnet_private_2"],
     var.vpc["subnet_private_3"],
   ]
-  target_role = "READ_ONLY"
+  vpc_security_group_ids = [aws_security_group.rds_proxy.id]
+  target_role            = "READ_ONLY"
 
   depends_on = [aws_db_proxy.rds_proxy]
 }
