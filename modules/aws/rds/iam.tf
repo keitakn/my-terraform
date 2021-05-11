@@ -46,3 +46,26 @@ resource "aws_iam_role_policy_attachment" "bastion_role_attachment" {
   role       = aws_iam_role.bastion_role.name
   policy_arn = data.aws_iam_policy.systems_manager.arn
 }
+
+// RDS Proxy用のIAM
+data "aws_iam_policy_document" "rds_proxy_assume_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["rds.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "rds_proxy_role" {
+  name               = "${terraform.workspace}-rds-proxy-role"
+  assume_role_policy = data.aws_iam_policy_document.rds_proxy_assume_role.json
+}
+
+resource "aws_iam_role_policy" "rds_proxy_policy" {
+  name   = "${terraform.workspace}-rds-proxy-policy"
+  role   = aws_iam_role.rds_proxy_role.id
+  policy = file("../../../../modules/aws/rds/files/policy/rds-proxy-policy.json")
+}
