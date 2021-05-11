@@ -15,6 +15,15 @@ resource "aws_security_group" "rds_cluster" {
   }
 }
 
+resource "aws_security_group_rule" "rds_from_bastion_server" {
+  security_group_id        = aws_security_group.rds_cluster.id
+  type                     = "ingress"
+  from_port                = "3306"
+  to_port                  = "3306"
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.bastion.id
+}
+
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name        = lookup(var.rds, "${terraform.workspace}.name", var.rds["default.name"])
   description = "${lookup(var.rds, "${terraform.workspace}.name", var.rds["default.name"])}-subnet-group"
