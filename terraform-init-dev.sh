@@ -9,6 +9,7 @@ tfstateDirList='
 /app/my-terraform/providers/aws/environments/11-cognito
 /app/my-terraform/providers/aws/environments/12-dynamodb
 /app/my-terraform/providers/aws/environments/13-lambda
+/app/my-terraform/providers/aws/environments/14-rds
 /app/my-terraform/providers/aws/environments/20-api
 /app/my-terraform/providers/aws/environments/20-eks
 '
