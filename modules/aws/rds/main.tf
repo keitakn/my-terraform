@@ -39,9 +39,9 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
   description = "${lookup(var.rds, "${terraform.workspace}.name", var.rds["default.name"])}-subnet-group"
 
   subnet_ids = [
-    var.vpc["subnet_private_1"],
-    var.vpc["subnet_private_2"],
-    var.vpc["subnet_private_3"],
+    var.vpc["subnet_public_1"],
+    var.vpc["subnet_public_2"],
+    var.vpc["subnet_public_3"],
   ]
 }
 

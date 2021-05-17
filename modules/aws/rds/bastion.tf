@@ -38,7 +38,7 @@ resource "aws_instance" "bastion" {
     "${terraform.workspace}.ami",
     var.bastion["default.ami"],
   )
-  associate_public_ip_address = false
+  associate_public_ip_address = true
   instance_type = lookup(
     var.bastion,
     "${terraform.workspace}.instance_type",
@@ -61,7 +61,7 @@ resource "aws_instance" "bastion" {
     )
   }
 
-  subnet_id              = var.vpc["subnet_private_3"]
+  subnet_id              = var.vpc["subnet_public_3"]
   vpc_security_group_ids = [aws_security_group.bastion.id]
 
   tags = {

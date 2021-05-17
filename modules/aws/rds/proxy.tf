@@ -54,14 +54,14 @@ resource "aws_db_proxy" "rds_proxy" {
   name                   = "${terraform.workspace}-rds-proxy"
   debug_logging          = false
   engine_family          = "MYSQL"
-  idle_client_timeout    = 1800
+  idle_client_timeout    = 120
   require_tls            = false
   role_arn               = aws_iam_role.rds_proxy_role.arn
   vpc_security_group_ids = [aws_security_group.rds_proxy.id]
   vpc_subnet_ids = [
-    var.vpc["subnet_private_1"],
-    var.vpc["subnet_private_2"],
-    var.vpc["subnet_private_3"],
+    var.vpc["subnet_public_1"],
+    var.vpc["subnet_public_2"],
+    var.vpc["subnet_public_3"],
   ]
 
   auth {
@@ -93,9 +93,9 @@ resource "aws_db_proxy_endpoint" "read_only" {
   db_proxy_name          = aws_db_proxy.rds_proxy.name
   db_proxy_endpoint_name = "${terraform.workspace}-read-only"
   vpc_subnet_ids = [
-    var.vpc["subnet_private_1"],
-    var.vpc["subnet_private_2"],
-    var.vpc["subnet_private_3"],
+    var.vpc["subnet_public_1"],
+    var.vpc["subnet_public_2"],
+    var.vpc["subnet_public_3"],
   ]
   vpc_security_group_ids = [aws_security_group.rds_proxy.id]
   target_role            = "READ_ONLY"
