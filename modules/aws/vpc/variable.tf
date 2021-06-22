@@ -40,3 +40,17 @@ variable "availability_zone" {
   type    = map(string)
   default = {}
 }
+
+variable "nat_instance" {
+  type = map(string)
+
+  default = {
+    "default.name"          = "prod-nat-instance"
+    "stg.name"              = "stg-nat-instance"
+    "dev.name"              = "dev-nat-instance"
+    "default.ami"           = "ami-00d29e4cb217ae06b"
+    "default.instance_type" = "t2.micro"
+    "default.volume_type"   = "gp2"
+    "default.volume_size"   = "30"
+  }
+}

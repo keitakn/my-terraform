@@ -69,3 +69,33 @@ resource "aws_iam_role_policy" "rds_proxy_policy" {
   role   = aws_iam_role.rds_proxy_role.id
   policy = file("../../../../modules/aws/rds/files/policy/rds-proxy-policy.json")
 }
+
+// RDS Migrationに利用するCodeBuildで利用するIAMロール
+data "aws_iam_policy_document" "codebuild_trust_relationship" {
+  statement {
+    effect = "Allow"
+
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type = "Service"
+
+      identifiers = [
+        "codebuild.amazonaws.com",
+        "codedeploy.amazonaws.com",
+        "secretsmanager.amazonaws.com",
+        "s3.amazonaws.com",
+      ]
+    }
+  }
+}
+
+resource "aws_iam_role" "rds_migration_role" {
+  name               = "${terraform.workspace}-rds-migration-role"
+  assume_role_policy = data.aws_iam_policy_document.codebuild_trust_relationship.json
+}
+
+resource "aws_iam_role_policy_attachment" "attachment_rds_migration_role" {
+  role       = aws_iam_role.rds_migration_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
